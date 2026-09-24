@@ -32,8 +32,8 @@ public class UserController {
     private UserService userService;
 
     @GetMapping ("/{id}") // Mapeia requisições HTTP GET na rota "/user/{id}"
-    public ResponseEntity<User> findById(@PathVariable Long Id){ // Método para buscar usuario por id capturado da URL
-        User obj=this.userService.findById(Id); // Invoca a busca do usuário através do ID recebido
+    public ResponseEntity<User> findById(@PathVariable Long id){ // Método para buscar usuario por id capturado da URL
+        User obj=this.userService.findById(id); // Invoca a busca do usuário através do ID recebido
         return ResponseEntity.ok().body(obj); // Retorn código HTTP 200(ok) com o onjeto User no corpo da resposta
     } // Fim do método FindbyId
 

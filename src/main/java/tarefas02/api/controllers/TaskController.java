@@ -1,6 +1,6 @@
 package tarefas02.api.controllers; // Declaração do pacote onde a classe controller está localizada
 
-
+import tarefas02.api.services.UserService;
 import tarefas02.api.repositories.TaskRepository;
 import java.net.URI; // Importa a classe URI para construir e manipular HTTP de novos recursos
 import java.util.List; // Importa a interface  List para manipular onde a classe controller está localizada 
@@ -31,6 +31,9 @@ public class TaskController { // Declaração de Classe píbulica TaskController
     @Autowired 
     private TaskService taskService;
 
+    @Autowired
+    private UserService userService;
+
    
 
     @GetMapping("/{id}") //Mapeia requisições HTTP GET na rota "/task/{id}"
@@ -39,11 +42,19 @@ public class TaskController { // Declaração de Classe píbulica TaskController
         return ResponseEntity.ok().body(obj); // Retorna HTTp 200(ok) 
     } // Fim do método findById
 
-    @GetMapping("/user/{userid}")
-    public ResponseEntity<List<Task>> findAllByUserId(@PathVariable Long userId){
-        List<Task> objs = this.taskService.findAllByUserId(userId);
-        return ResponseEntity.ok().body(objs);
-    }
+  //  @GetMapping("/user/{userid}")
+  //  public ResponseEntity<List<Task>> findAllByUserId(@PathVariable Long userId){
+   //     List<Task> objs = this.taskService.findAllByUserId(userId);
+   //     return ResponseEntity.ok().body(objs);
+  //  }
+
+    @GetMapping("/user/{userId}")
+public ResponseEntity<List<Task>> findAllByUserId(@PathVariable("userId") Long userId) {
+    this.userService.findById(userId);
+    List<Task> objs = this.taskService.findAllByUserId(userId);
+    return ResponseEntity.ok().body(objs);
+}
+
 
     @PostMapping 
     public ResponseEntity<Void> create(@Valid @RequestBody Task obj){
@@ -53,7 +64,7 @@ public class TaskController { // Declaração de Classe píbulica TaskController
         return ResponseEntity.created(url).build();
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Void> update(@Valid @RequestBody Task obj, @PathVariable Long id){
         obj.setId(id);
         this.taskService.update(obj);
